@@ -9,11 +9,6 @@ import Foundation
 
 // http://pages.cs.wisc.edu/~cao/papers/summary-cache/node8.html
 
-@inline(__always)
-func ceil64(_ v: Int) -> Int {
-  (v + 63) >> 6
-}
-
 fileprivate func optimalK(m: Int, n: Int) -> Int {
   let _m = Double(m)
   let _n = Double(n)
@@ -33,15 +28,14 @@ fileprivate func falsePositiveProbability(m: Int, n: Int, k: Int) -> Double {
   return f
 }
 
-open class BloomFilter {
-  private var bits: [UInt64]
-  private var bitsCount: Int
+public final class BloomFilter {
+  private var bits: CompressedBitmap
+  private let bitsCount: Int
   private let hashCount: Int
   private let seed: UInt32
   
   // m/n 最优比例（平衡误报率和内存占用）9.8385e-6 < 1e-5
   public static let mnRate1e_5 = 24
-  private static let UINT64_BITS: Int = 64
   
   /// init function
   /// - Parameters:
@@ -53,37 +47,27 @@ open class BloomFilter {
     let m = n * rate
     let k = optimalK(m: m, n: n)
     //        print("optimal K \(k)")
-    self.bits = Array(repeating: 0, count: ceil64(m))
+    self.bits = CompressedBitmap(m)
     self.hashCount = k
     self.bitsCount = m
     self.seed = seed
   }
   
-  
-  @inline(__always)
-  private func locationIndex(_ value: Int) -> (location: Int, index: Int) {
-    return (location: value / BloomFilter.UINT64_BITS, index: value % BloomFilter.UINT64_BITS)
-  }
-  
   /// add to bloom filter
-  open func add(_ element: String) {
+  public func add(_ element: String) {
     let locations = self.hashValues(element)
     for location in locations {
-      let (lct, idx) = locationIndex(location)
-      self.bits[lct] = self.bits[lct] | 1 << idx
+      bits.set(value: true, for: location)
     }
   }
   
   /// if the value is in the bloom filter
   /// - Parameter string: value
   /// - Returns: result
-  open func contains(_ element: String) -> Bool {
+  public func contains(_ element: String) -> Bool {
     let hashes = self.hashValues(element)
-    for hash in hashes {
-      let (lct, idx) = locationIndex(hash)
-      if self.bits[lct] & 1 << idx == 0 {
-        return false
-      }
+    for hash in hashes where self.bits.get(for: hash) == false {
+      return false
     }
     return true
   }
