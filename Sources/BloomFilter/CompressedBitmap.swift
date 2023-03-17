@@ -30,6 +30,8 @@ final class CompressedBitmap {
 }
 
 extension CompressedBitmap: Bitmap {
+  var count: Int { capacity }
+  
   func set(value: Bool, for index: Int) {
     guard capacity > index else { return }
     let (lct, idx) = CompressedBitmap.locationIndex(index)
