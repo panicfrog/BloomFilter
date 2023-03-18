@@ -1,3 +1,3 @@
 # BloomFilter
 
-A description of this package.
+Bloom Filter implement with swift.
