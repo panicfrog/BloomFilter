@@ -43,4 +43,20 @@ final class BloomFilterTests: XCTestCase {
     }
     XCTAssertEqual(bloom.contains("\(max)"), false)
   }
+    
+  func testSafetyBigCollection() throws {
+      let max = 30000
+      let bloom = BloomFilterBuilder.default
+        .with(maxElements: max)
+        .with(safety: true)
+        .build()
+      for i in 0..<max {
+        bloom.add("\(i)")
+        XCTAssertEqual(bloom.contains("\(i + 1)"), false)
+      }
+      for i in 0..<max {
+        XCTAssertEqual(bloom.contains("\(i)"), true)
+      }
+      XCTAssertEqual(bloom.contains("\(max)"), false)
+    }
 }

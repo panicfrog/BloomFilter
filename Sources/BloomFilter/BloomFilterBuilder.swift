@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  BloomFilterBuilder.swift
 //  
 //
 //  Created by 叶永平 on 2023/3/17.
@@ -38,6 +38,7 @@ public final class BloomFilterBuilder {
   private var bitmap: Bitmap?
   private var hasher: (any Hasher)?
   private var hashCount: Int?
+  private var safety: Bool?
   
   private init(bitmap: Bitmap? = nil, hasher: (any Hasher)? = nil, hashCount: Int? = nil) {
     self.bitmap = bitmap
@@ -54,6 +55,9 @@ public final class BloomFilterBuilder {
     let bitmap = self.bitmap ?? CompressedBitmap(20*10000)
     let hasher = self.hasher ?? DefaultHasher()
     let hashCount = self.hashCount ?? optimalK(m: 20*10000, n: 10000)
+    if let safety, safety {
+      return SafetyBloomFilter(bitmap: bitmap, hashCount: hashCount, hasher: hasher)
+    }
     return BloomFilter(hashCount: hashCount, bitmap: bitmap, hasher: hasher)
   }
   
@@ -74,6 +78,11 @@ public final class BloomFilterBuilder {
   /// - Parameter hasher: hasher
   public func with(hasher: any Hasher) -> Self {
     self.hasher = hasher
+    return self
+  }
+    
+  public func with(safety: Bool) -> Self {
+    self.safety = safety
     return self
   }
 }

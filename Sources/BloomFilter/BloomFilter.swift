@@ -1,3 +1,10 @@
+//
+//  BloomFilter.swift
+//
+//
+//  Created by 叶永平 on 2023/3/17.
+//
+
 import Foundation
 
 public final class BloomFilter: Filter {
@@ -16,7 +23,6 @@ public final class BloomFilter: Filter {
         self.bitmap = bitmap
         self.hasher = hasher
     }
-    
     
     /// add element to bloom filter
     /// - Parameter element: element
