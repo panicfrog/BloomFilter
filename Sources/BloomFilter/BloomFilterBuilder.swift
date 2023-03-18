@@ -50,7 +50,7 @@ public final class BloomFilterBuilder {
                                             hasher: DefaultHasher(),
                                             hashCount: optimalK(m: 20*10000, n: 10000))
   
-  public func build() -> BloomFilter {
+  public func build() -> Filter {
     let bitmap = self.bitmap ?? CompressedBitmap(20*10000)
     let hasher = self.hasher ?? DefaultHasher()
     let hashCount = self.hashCount ?? optimalK(m: 20*10000, n: 10000)
