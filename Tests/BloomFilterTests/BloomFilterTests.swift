@@ -69,7 +69,7 @@ final class BloomFilterTests: XCTestCase {
     
   func testCuckooFilterBigCollection() throws {
       let max = 30000
-      let filter = CuckooFilter(buckets: max)
+      let filter = CuckooFilter()
       for i in 0..<max {
          let result = filter.add("\(i)")
           if case .failure = result {

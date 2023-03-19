@@ -7,9 +7,7 @@
 
 import Foundation
 
-
-let FINGERPRINT_SIZE: Int = 1
-let BUCKET_SIZE: Int = 4
+let BUCKET_SLOT_COUNT: Int = 4
 let EMPTY_FINGERPRINT_DATA = itod(i: 100)
 
 public struct Fingerprint: Equatable {
@@ -27,25 +25,21 @@ public struct Fingerprint: Equatable {
     var isEmpty: Bool {
         data == EMPTY_FINGERPRINT_DATA
     }
-
-    mutating func sliceCopy(fingerprint: Data) {
-        self.data = fingerprint
-    }
 }
 
 struct Bucket {
-    var buffer: [Fingerprint]
+    var entries: [Fingerprint]
 
     init() {
-        self.buffer = [Fingerprint](repeating: Fingerprint.empty(), count: BUCKET_SIZE)
+        self.entries = [Fingerprint](repeating: Fingerprint.empty(), count: BUCKET_SLOT_COUNT)
     }
 
     /// Inserts the fingerprint into the buffer if the buffer is not full. This operation is O(1).
     @discardableResult
     mutating func insert(fp: Fingerprint) -> Bool {
-        for (idx, entry) in buffer.enumerated() {
+        for (idx, entry) in entries.enumerated() {
             if entry.isEmpty {
-                buffer[idx] = fp
+                entries[idx] = fp
                 return true
             }
         }
@@ -55,8 +49,8 @@ struct Bucket {
     /// Deletes the given fingerprint from the bucket. This operation is O(1).
     @discardableResult
     mutating func delete(fp: Fingerprint) -> Bool {
-        if let idx = buffer.firstIndex(where: { $0 == fp }) {
-            buffer[idx] = Fingerprint.empty()
+        if let idx = entries.firstIndex(where: { $0 == fp }) {
+            entries[idx] = Fingerprint.empty()
             return true
         }
         return false
@@ -64,12 +58,12 @@ struct Bucket {
 
     /// Returns the index of the given fingerprint, if its found. O(1)
     func getFingerprintIndex(fp: Fingerprint) -> Int? {
-        return buffer.firstIndex(where: { $0 == fp })
+        return entries.firstIndex(where: { $0 == fp })
     }
 
     /// Returns all current fingerprint data of the current buffer for storage.
     func getFingerprintData() -> [UInt8] {
-        return buffer.flatMap { $0.data }
+        return entries.flatMap { $0.data }
     }
 
     /// Empties the bucket by setting each used entry to Fingerprint::empty(). Returns the number of entries that were modified.
@@ -82,7 +76,7 @@ extension Bucket: ExpressibleByArrayLiteral {
     init(arrayLiteral elements: Fingerprint...) {
         self.init()
         for (idx, element) in elements.enumerated() {
-            buffer[idx] = element
+            entries[idx] = element
         }
     }
 }
