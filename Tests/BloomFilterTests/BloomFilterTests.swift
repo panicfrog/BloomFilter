@@ -59,4 +59,27 @@ final class BloomFilterTests: XCTestCase {
       }
       XCTAssertEqual(bloom.contains("\(max)"), false)
     }
+    
+  func testBaseCuckooFilter() throws {
+    let filter = CuckooFilter(buckets: 300)
+    XCTAssertFalse(filter.contains("cuckoo filter"))
+    _ = filter.add("cuckoo filter")
+    XCTAssertTrue(filter.contains("cuckoo filter"))
+  }
+    
+  func testCuckooFilterBigCollection() throws {
+      let max = 30000
+      let filter = CuckooFilter(buckets: max)
+      for i in 0..<max {
+         let result = filter.add("\(i)")
+          if case .failure = result {
+              XCTAssert(false, "No space")
+          }
+        XCTAssertEqual(filter.contains("\(i + 1)"), false)
+      }
+      for i in 0..<max {
+        XCTAssertEqual(filter.contains("\(i)"), true)
+      }
+      XCTAssertEqual(filter.contains("\(max)"), false)
+    }
 }
