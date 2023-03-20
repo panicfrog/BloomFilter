@@ -12,6 +12,11 @@ import Foundation
  m 布隆过滤器中的bit位数
  n 要插入的元素数量
  k hash函数的数量
+ 
+ n = ceil(m / (-k / log(1 - exp(log(f) / k))))
+ f = pow(1 - exp(-k / (m / n)), k)
+ m = ceil((n * log(f)) / log(1 / pow(2, log(2))));
+ k = round((m / n) * log(2));
  */
 
 fileprivate func optimalK(m: Int, n: Int) -> Int {
@@ -51,6 +56,9 @@ public final class BloomFilterBuilder {
                                             hasher: DefaultHasher(),
                                             hashCount: optimalK(m: 20*10000, n: 10000))
   
+  
+  /// build Filter
+  /// - Returns: filter
   public func build() -> Filter {
     let bitmap = self.bitmap ?? CompressedBitmap(20*10000)
     let hasher = self.hasher ?? DefaultHasher()
@@ -64,7 +72,8 @@ public final class BloomFilterBuilder {
   /// Configuration capacity and m/n
   /// - Parameters:
   ///   - maxElements: maximum elements to add
-  ///   - mnRate: The ratio of the bitmap capacity to themaximum elements
+  ///   - mnRate: The rate of the bitmap capacity to themaximum elements
+  /// - Returns: builder
   public func with(maxElements: Int, mnRate: Int = 24) -> Self {
     let n = maxElements
     let m = n * mnRate
@@ -74,13 +83,33 @@ public final class BloomFilterBuilder {
     return self
   }
   
+  
+  /// Configuration capacity and fasle positive rate
+  /// - Parameters:
+  ///   - maxElements: maximum elements to add
+  ///   - falsePositiveRate: false positive rate for maximum elements
+  /// - Returns: builder
+  public func with(maxElements: Int, falsePositiveRate: Double) -> Self {
+    let n = Double(maxElements)
+    let f = falsePositiveRate
+    let m = Int(ceil((n * log(f)) / log(1 / pow(2, log(2)))))
+    let k = optimalK(m: m, n: maxElements)
+    bitmap = CompressedBitmap(m)
+    hashCount = k
+    return self
+  }
+  
   /// set hasher
   /// - Parameter hasher: hasher
+  /// - Returns: builder
   public func with(hasher: any Hasher) -> Self {
     self.hasher = hasher
     return self
   }
-    
+  
+  /// Configuration thread safety filter
+  /// - Parameter safety: ture if thread safety, false if not
+  /// - Returns: builder
   public func with(safety: Bool) -> Self {
     self.safety = safety
     return self

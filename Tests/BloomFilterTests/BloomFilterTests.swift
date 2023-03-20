@@ -32,7 +32,7 @@ final class BloomFilterTests: XCTestCase {
   func testBigCollection() throws {
     let max = 30000
     let bloom = BloomFilterBuilder.default
-      .with(maxElements: max)
+      .with(maxElements: max, falsePositiveRate: 0.00001)
       .build()
     for i in 0..<max {
       bloom.add("\(i)")
