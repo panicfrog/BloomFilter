@@ -31,6 +31,8 @@ let package = Package(
             ]),
         .testTarget(
             name: "BloomFilterTests",
-            dependencies: ["BloomFilter"]),
+            dependencies: ["BloomFilter"],
+            resources: [.copy("keys.txt")]
+        )
     ]
 )

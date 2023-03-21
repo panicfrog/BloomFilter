@@ -40,33 +40,39 @@ fileprivate func falsePositiveProbability(m: Int, n: Int, k: Int) -> Double {
 
 /// bloom filter builder
 public final class BloomFilterBuilder {
-  private var bitmap: Bitmap?
-  private var hasher: (any Hasher)?
-  private var hashCount: Int?
-  private var safety: Bool?
   
-  private init(bitmap: Bitmap? = nil, hasher: (any Hasher)? = nil, hashCount: Int? = nil) {
-    self.bitmap = bitmap
+  // m and n
+  private struct MaN {
+    let m: Int
+    let n: Int
+  }
+  
+  private var hasher: (any Hasher)?
+  private var safety: Bool?
+  private var man: MaN?
+  private var bitmapBuilder: ((Int) -> Bitmap)?
+  
+  private init(bitmapBuilder: ((Int) -> Bitmap)? = nil, hasher: (any Hasher)? = nil) {
+    self.bitmapBuilder = bitmapBuilder
     self.hasher = hasher
-    self.hashCount = hashCount
   }
   
   /// The default is based on inserting up to 10000 elements m/n = 20, the error rate at this time is 6.71e-05 < 1e-4
-  static let `default` = BloomFilterBuilder(bitmap: CompressedBitmap(20*10000),
-                                            hasher: DefaultHasher(),
-                                            hashCount: optimalK(m: 20*10000, n: 10000))
+  static let `default` = BloomFilterBuilder(hasher: DefaultHasher())
   
   
   /// build Filter
   /// - Returns: filter
   public func build() -> Filter {
-    let bitmap = self.bitmap ?? CompressedBitmap(20*10000)
-    let hasher = self.hasher ?? DefaultHasher()
-    let hashCount = self.hashCount ?? optimalK(m: 20*10000, n: 10000)
+    let bitmapBuilder = bitmapBuilder ??  { (m: Int) in CompressedBitmap(m) }
+    let hasher = hasher ?? DefaultHasher()
+    let man = man ?? MaN(m: 20 * 10000, n: 10000)
+    let hashCount = optimalK(m: man.m, n: man.n)
     if let safety, safety {
-      return SafetyBloomFilter(bitmap: bitmap, hashCount: hashCount, hasher: hasher)
+      return SafetyBloomFilter(bitmap: bitmapBuilder(man.m), hashCount: hashCount, hasher: hasher)
+    } else {
+      return BloomFilter(hashCount: hashCount, bitmap: bitmapBuilder(man.m), hasher: hasher)
     }
-    return BloomFilter(hashCount: hashCount, bitmap: bitmap, hasher: hasher)
   }
   
   /// Configuration capacity and m/n
@@ -75,14 +81,9 @@ public final class BloomFilterBuilder {
   ///   - mnRate: The rate of the bitmap capacity to themaximum elements
   /// - Returns: builder
   public func with(maxElements: Int, mnRate: Int = 24) -> Self {
-    let n = maxElements
-    let m = n * mnRate
-    let k = optimalK(m: m, n: n)
-    self.bitmap = CompressedBitmap(m)
-    self.hashCount = k
+    man = MaN(m: maxElements*mnRate, n: maxElements)
     return self
   }
-  
   
   /// Configuration capacity and fasle positive rate
   /// - Parameters:
@@ -93,9 +94,16 @@ public final class BloomFilterBuilder {
     let n = Double(maxElements)
     let f = falsePositiveRate
     let m = Int(ceil((n * log(f)) / log(1 / pow(2, log(2)))))
-    let k = optimalK(m: m, n: maxElements)
-    bitmap = CompressedBitmap(m)
-    hashCount = k
+    man = MaN(m: m, n: maxElements)
+    return self
+  }
+
+  
+  /// Configuration bitmap
+  /// - Parameter builder: bitmap builder
+  /// - Returns:
+  public func with(bitmap builder: @escaping (Int) -> Bitmap) -> Self {
+    bitmapBuilder = builder
     return self
   }
   
