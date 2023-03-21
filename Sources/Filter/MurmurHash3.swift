@@ -15,36 +15,33 @@ import Cmurmur3
 
 public struct MurmurHash3 {
     public static func sum32(_ data: Data, seed: UInt32) -> UInt32 {
-      var result: UInt32 = 0
       let len = Int32(data.count)
-      _ = data.withUnsafeBytes { dataPtr in
+      return data.withUnsafeBytes { dataPtr in
+        var result: UInt32 = 0
         let buffer: UnsafePointer<UInt8> = dataPtr.baseAddress!.assumingMemoryBound(to: UInt8.self)
         MurmurHash3_x86_32(buffer, len, seed, &result)
-        return buffer
+        return result
       }
-      return result
     }
   
   public static func sum64(_ data: Data, seed: UInt32) -> UInt64 {
-    var result: UInt64 = 0
     let len = Int32(data.count)
-    _ = data.withUnsafeBytes { dataPtr in
+    return data.withUnsafeBytes { dataPtr in
+      var result: UInt64 = 0
       let buffer: UnsafePointer<UInt8> = dataPtr.baseAddress!.assumingMemoryBound(to: UInt8.self)
       MurmurHash3_x64_128(buffer, len, seed, &result)
-      return buffer
+      return result
     }
-    return result
   }
   
   public static func sum128(_ data: Data, seed: UInt32) -> UInt64 {
-    var result: UInt64 = 0
     let len = Int32(data.count)
-    _ = data.withUnsafeBytes { dataPtr in
+    return data.withUnsafeBytes { dataPtr in
+      var result: UInt64 = 0
       let buffer: UnsafePointer<UInt8> = dataPtr.baseAddress!.assumingMemoryBound(to: UInt8.self)
       MurmurHash3_x86_128(buffer, len, seed, &result)
-      return buffer
+      return result
     }
-    return result
   }
   
 }

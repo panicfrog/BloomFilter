@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "BloomFilter",
+    name: "Filter",
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "BloomFilter",
-            targets: ["BloomFilter"]),
+            name: "Filter",
+            targets: ["Filter"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,13 +25,13 @@ let package = Package(
         ),
       
         .target(
-            name: "BloomFilter",
+            name: "Filter",
             dependencies: [
               .target(name: "Cmurmur3")
             ]),
         .testTarget(
-            name: "BloomFilterTests",
-            dependencies: ["BloomFilter"],
+            name: "FilterTests",
+            dependencies: ["Filter"],
             resources: [.copy("keys.txt")]
         )
     ]

@@ -1,5 +1,5 @@
 import XCTest
-@testable import BloomFilter
+@testable import Filter
 
 /// Read text file line by line in efficient way
 public class LineReader {
@@ -40,7 +40,7 @@ extension LineReader: Sequence {
    }
 }
 
-final class BloomFilterTests: XCTestCase {
+final class FilterTests: XCTestCase {
   func testMurmur3() throws {
     let sum32 = MurmurHash3.sum32("Hello, world".data(using: .utf8)!, seed: 0)
     let sum64 = MurmurHash3.sum64("Hello, world".data(using: .utf8)!, seed: 0)
