@@ -1,6 +1,8 @@
 # Filter
 
-This is a library for implementing Bloom and Cuckoo filters in Swift. The library provides two filters `BloomFilter` and `CuckooFilter` which can be used to create and manipulate Bloom and Cuckoo filters.
+This is a library for implementing Bloom and Cuckoo filters in Swift. The library provides two filters `BloomFilter` and `CuckooFilter` which can be used to filter data, reduce database access, crawlers, etc.
+
+`CuckooFilter` is under development, details are in [cuckoo_filter branch](https://github.com/panicfrog/Filter/tree/cuckoo_filter)
 
 ## Installation
 
