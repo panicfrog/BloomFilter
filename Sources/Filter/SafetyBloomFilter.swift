@@ -15,12 +15,19 @@ final class SafetyBloomFilter: Filter {
     private let queue = DispatchQueue(label: "github.io.panicfrog.BloomFilter.SafetyBloomFilter",
                                       attributes: .concurrent)
     
+    /// create bloom filter
+    /// - Parameters:
+    ///   - bitmap: bitmap
+    ///   - hashCount: bits count per element
+    ///   - hasher: hasher
     init(bitmap: Bitmap, hashCount: Int, hasher: any Hasher) {
         self.bitmap = bitmap
         self.hashCount = hashCount
         self.hasher = hasher
     }
     
+    /// add element to bloom filter
+    /// - Parameter element: element
     func add(_ element: FilterElement) {
         let data = element.data()
         let locations = hashValues(data)
@@ -31,6 +38,9 @@ final class SafetyBloomFilter: Filter {
         }
     }
     
+    /// determine whether the bloom filter contains this element
+    /// - Parameter element: element
+    /// - Returns: result
     func contains(_ element: FilterElement) -> Bool {
         let data = element.data()
         let hashes = hashValues(data)

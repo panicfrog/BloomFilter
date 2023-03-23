@@ -19,6 +19,12 @@ import Foundation
  k = round((m / n) * log(2));
  */
 
+
+/// Calculate the best k value
+/// - Parameters:
+///   - m: bitmap capacity
+///   - n: maximum number of items
+/// - Returns: hash times
 fileprivate func optimalK(m: Int, n: Int) -> Int {
   let _m = Double(m)
   let _n = Double(n)
@@ -30,6 +36,13 @@ fileprivate func optimalK(m: Int, n: Int) -> Int {
   return ckf > fkf ? fk : ck
 }
 
+
+///  Calculation false positive  rate
+/// - Parameters:
+///   - m: bitmap capacity
+///   - n: maximum number of items
+///   - k: hash times
+/// - Returns:  false positive  rate
 fileprivate func falsePositiveProbability(m: Int, n: Int, k: Int) -> Double {
   let _k = Double(k)
   let _n = Double(n)
@@ -59,7 +72,6 @@ public final class BloomFilterBuilder {
   
   /// The default is based on inserting up to 10000 elements m/n = 20, the error rate at this time is 6.71e-05 < 1e-4
   static let `default` = BloomFilterBuilder(hasher: DefaultHasher())
-  
   
   /// build Filter
   /// - Returns: filter
@@ -98,7 +110,6 @@ public final class BloomFilterBuilder {
     return self
   }
 
-  
   /// Configuration bitmap
   /// - Parameter builder: bitmap builder
   /// - Returns:
