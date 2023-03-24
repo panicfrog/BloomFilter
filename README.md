@@ -22,7 +22,7 @@ let package = Package(
         .library(name: "YourPackage", targets: ["YourPackage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/panicfrog/Filter.git", from: "0.0.2"),
+        .package(url: "https://github.com/panicfrog/Filter.git", from: "0.0.1"),
     ],
     targets: [
         .target(
