@@ -4,20 +4,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "BloomFilter",
+    name: "Filter",
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "BloomFilter",
-            targets: ["BloomFilter"]),
+            name: "Filter",
+            targets: ["Filter"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+      .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
           name: "Cmurmur3",
           dependencies: [],
@@ -25,12 +21,14 @@ let package = Package(
         ),
       
         .target(
-            name: "BloomFilter",
+            name: "Filter",
             dependencies: [
               .target(name: "Cmurmur3")
             ]),
         .testTarget(
-            name: "BloomFilterTests",
-            dependencies: ["BloomFilter"]),
+            name: "FilterTests",
+            dependencies: ["Filter"],
+            resources: [.copy("keys.txt")]
+        )
     ]
 )
