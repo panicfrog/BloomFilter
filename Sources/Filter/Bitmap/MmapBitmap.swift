@@ -20,7 +20,7 @@ public final class MmapBitmap: Bitmap {
   private var filePtr: UnsafeMutableRawPointer?
   private var ptr: UnsafeMutablePointer<UInt64>?
   
-  init(_ capacity: Int, path: URL) throws {
+  public init(_ capacity: Int, path: URL) throws {
     self.count = capacity
     let int64Count = ceil64(capacity)
     let fd = open(path.relativePath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)

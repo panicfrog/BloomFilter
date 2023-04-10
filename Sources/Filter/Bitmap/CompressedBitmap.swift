@@ -11,7 +11,7 @@ final class CompressedBitmap: Bitmap {
   private(set) var bits: ContiguousArray<UInt64>
   private let capacity: Int
   
-  init(_ capacity: Int) {
+  public init(_ capacity: Int) {
     self.capacity = capacity
     self.bits = ContiguousArray(repeating: 0, count: ceil64(capacity))
   }
