@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class CompressedBitmap: Bitmap {
+public final class CompressedBitmap: Bitmap {
   private(set) var bits: ContiguousArray<UInt64>
   private let capacity: Int
   
@@ -16,9 +16,9 @@ final class CompressedBitmap: Bitmap {
     self.bits = ContiguousArray(repeating: 0, count: ceil64(capacity))
   }
   
-  var count: Int { capacity }
+  public var count: Int { capacity }
   
-  func set(value: Bool, for index: Int) {
+  public func set(value: Bool, for index: Int) {
     guard capacity > index else { return }
     let (lct, idx) = locationIndex(index)
     if value {
@@ -28,7 +28,7 @@ final class CompressedBitmap: Bitmap {
     }
   }
   
-  func get(for index: Int) -> Bool? {
+  public func get(for index: Int) -> Bool? {
     guard capacity > index else { return nil }
     let (lct, idx) = locationIndex(index)
     return !(bits[lct] & 1 << idx == 0)
