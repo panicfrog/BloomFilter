@@ -48,6 +48,7 @@
 
 # Kernel Module Compile Results
 *.mod*
+!module.modulemap
 *.cmd
 .tmp_versions/
 modules.order

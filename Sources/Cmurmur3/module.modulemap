@@ -1,0 +1,4 @@
+module Cmurmur3 {
+  header 'include/murmur3.h'
+  export *
+}
