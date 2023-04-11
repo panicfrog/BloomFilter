@@ -6,7 +6,9 @@
 //
 
 import Foundation
+#if canImport(Cmurmur3)
 import Cmurmur3
+#endif
 
 
 // 实现了MurmurHash3算法
