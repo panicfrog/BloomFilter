@@ -12,6 +12,7 @@ Pod::Spec.new do |spec|
   spec.osx.deployment_target = "10.13"
   spec.source       = { :git => "https://github.com/panicfrog/Filter.git", :tag => "#{spec.version}" }
   spec.source_files  = "Sources/Filter/**/*.{swift}", "Sources/Cmurmur3/**/*.{c,h}"
+  spec.public_header_files = "Sources/Cmurmur3/include/*.h"
   spec.preserve_path = 'Sources/Cmurmur3/module.modulemap'
   spec.pod_target_xcconfig = { 'SWIFT_INCLUDE_PATHS' => '$(SRCROOT)/Filter/Sources/Cmurmur3/include/**' }
   spec.swift_version = '5.7'
