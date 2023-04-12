@@ -19,11 +19,16 @@ let package = Package(
           dependencies: [],
           path: "Sources/Cmurmur3"
         ),
-      
+        .target(
+          name: "Cxxh",
+          dependencies: [],
+          path: "Sources/Cxxh"
+        ),
         .target(
             name: "Filters",
             dependencies: [
-              .target(name: "Cmurmur3")
+              .target(name: "Cmurmur3"),
+              .target(name: "Cxxh")
             ]),
         .testTarget(
             name: "FilterTests",

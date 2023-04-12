@@ -2,7 +2,7 @@
 
 This is a library for implementing Bloom and Cuckoo filters in Swift. The library provides two filters `BloomFilter` and `CuckooFilter` which can be used to filter data, reduce database access, crawlers, etc.
 
-`CuckooFilter` is under development, details are in [cuckoo_filter branch](https://github.com/panicfrog/Filter/tree/cuckoo_filter)
+`CuckooFilter` is under development, details are in [cuckoo_filter branch](https://github.com/panicfrog/Filters/tree/cuckoo_filter)
 
 ## Installation
 
@@ -22,7 +22,7 @@ let package = Package(
         .library(name: "YourPackage", targets: ["YourPackage"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/panicfrog/Filter.git", from: "0.0.1"),
+        .package(url: "https://github.com/panicfrog/Filters.git", from: "0.0.2"),
     ],
     targets: [
         .target(

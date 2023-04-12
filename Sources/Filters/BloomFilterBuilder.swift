@@ -71,9 +71,7 @@ public final class BloomFilterBuilder {
   }
   
   /// The default is based on inserting up to 10000 elements m/n = 20, the error rate at this time is 6.71e-05 < 1e-4
-  public class var `default`: BloomFilterBuilder {
-    BloomFilterBuilder(hasher: DefaultHasher())
-  }
+  public class var `default`: BloomFilterBuilder { BloomFilterBuilder() }
   
   /// build Filter
   /// - Returns: filter

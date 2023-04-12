@@ -1,0 +1,4 @@
+module Cxxh {
+  header 'include/xxhash.h'
+  export *
+}
