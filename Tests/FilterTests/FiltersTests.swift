@@ -60,6 +60,13 @@ final class FiltersTests: XCTestCase {
     bloom.add("bloom")
     XCTAssertEqual(bloom.contains("bloom"), true)
   }
+  
+  func testBloomBuilder() throws {
+    let bb1 = BloomFilterBuilder.default
+    let bb2 = BloomFilterBuilder.default
+    XCTAssertTrue(bb1 !== bb2)
+  }
+  
   func testOverflow() throws {
     let bloom = BloomFilterBuilder.default
       .with(maxElements: 50)
