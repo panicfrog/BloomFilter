@@ -4,11 +4,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "Filter",
+    name: "Filters",
     products: [
         .library(
-            name: "Filter",
-            targets: ["Filter"]),
+            name: "Filters",
+            targets: ["Filters"]),
     ],
     dependencies: [
       .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"),
@@ -21,13 +21,13 @@ let package = Package(
         ),
       
         .target(
-            name: "Filter",
+            name: "Filters",
             dependencies: [
               .target(name: "Cmurmur3")
             ]),
         .testTarget(
             name: "FilterTests",
-            dependencies: ["Filter"],
+            dependencies: ["Filters"],
             resources: [.copy("keys.txt")]
         )
     ]

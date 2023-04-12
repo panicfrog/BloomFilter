@@ -34,7 +34,7 @@ let package = Package(
 
 #### Xcode
 
-File -> Add packages  https://github.com/panicfrog/Filter.git
+File -> Add packages  https://github.com/panicfrog/Filters.git
 
 ## Usage
 
