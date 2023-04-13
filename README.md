@@ -50,7 +50,7 @@ pod 'Filters', '~> 0.0.2'
 // create bloom filter with `BloomFilterBuilder`
 let bloom = BloomFilterBuilder.default
         .with(maxElements: max)   // the maximum number of elements expected to be added
-				.with(hasher: Xxhasher()) // default is Murmurhash3_x86_32
+        .with(hasher: Xxhasher()) // default is Murmurhash3_x86_32
         .with(safety: true)       // thread safety
         .build()
 // add item to filter
