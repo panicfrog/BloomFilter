@@ -6,9 +6,9 @@ This is a library for implementing Bloom and Cuckoo filters in Swift. The librar
 
 ## Installation
 
-#### SPM
+The library can be added as dependency via [swift package manager](https://www.swift.org/package-manager/) or [Cocoapods](https://cocoapods.org/) .
 
-The library can be installed using [swift package manager](https://www.swift.org/package-manager/)
+#### SPM
 
 ```swift
 // swift-tools-version: 5.7
@@ -36,13 +36,22 @@ let package = Package(
 
 File -> Add packages  https://github.com/panicfrog/Filters.git
 
+### Cocoapods
+
+```ruby
+pod 'Filters', '~> 0.0.2'
+```
+
+
+
 ## Usage
 
 ```swift
 // create bloom filter with `BloomFilterBuilder`
 let bloom = BloomFilterBuilder.default
-        .with(maxElements: max)
-        .with(safety: true)
+        .with(maxElements: max)   // the maximum number of elements expected to be added
+				.with(hasher: Xxhasher()) // default is Murmurhash3_x86_32
+        .with(safety: true)       // thread safety
         .build()
 // add item to filter
 bloom.add("hello")
